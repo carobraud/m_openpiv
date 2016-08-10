@@ -1,0 +1,51 @@
+netcdf openpiv.parameters {//written in NetCDF CDL language
+//dimensions:
+
+//variable declaration and attributes
+variables:
+//parameters to process PIV
+  int piv_process;
+    piv_process:dt=35; // time between pairs of images in microseconde
+    piv_process:windowsize=32; // size of the final windows in pixels 
+    piv_process:overlaping=16; // overlaping windows in pixels
+    piv_process:search_area=32; // size of initial windows in pixels 
+    piv_process:scaling_factor=21333; //scaling factor from pixels to meter
+//Treatment of images before piv processing 
+  int image;
+    image:tronc=0; //troncate image (for faster computations): 0=false, 1=true 
+    //image:crop_param= 600,2200,0,1024 //TODO 
+    image:apply_mask=1; //Apply mask: 0=false, 1=true (TODO: apply on vector field instead of image) 
+    image:mask_dirname="/media/HDImage/SMARTEOLE/MASK";//directory of the mask
+    image:mask_filename="big_mask.txt";//"big_mask.txt";//filename of the mask
+    image:mask_rows2skip=8;//rows to skip in the CVS file
+    image:mask_flagnum=16; //flag number for mask 
+    image:compute_mean=0; //ensemble average of images: 0=false, 1=true
+    image:display_mean=0; //the mean image
+    image:read_mean=0; // read the ensemble average of images from a file: 0=false, 1=true
+    image:divide_by_mean=0; //divide instanneous image by mean image: 0=false, 1=true	
+//filters parameters
+  int filters;
+    filters:show_histogram=0; //show histogram of u,v and signal to noise ?: 0=false, 1=true 
+    filters:s2n=0; // use of signal to noise filter ?: 0=false, 1=true 
+    filters:s2n_threshold=1.3; // parameter of the signal to noise filter (take value when s2n higher than 1.3)
+    filters:s2n_flagnum=1; //flag number of signal to noise filter
+    filters:threshold=1; // use of signal to threshold filter ?: 0=false, 1=true 
+    filters:threshold_umin=-6.;//minimum value of u based on histogram
+    filters:threshold_umax=40.; //maximum value of u based on histogram
+    filters:threshold_vmin=-8;//minimum value of v based on histogram
+    filters:threshold_vmax=5.; //maximum value of v based on histogram
+    filters:threshold_flagnum=2; //flag number of threshold filter
+    filters:median =1; //replace outliers by median filter ?: 0=false, 1=true 
+    filters:median_kernel =3; //kernel value of the median filter
+    filters:median_iteration =20; //number of iterations to replace by median filter
+    filters:localmean =1;//replace outliers by local mean ?: 0=false, 1=true
+    filters:localmean_kernel =3; //kernel value of the local median filter
+    filters:localmean_iteration =20; //Iteration value of the local mean filter
+    filters:localmean_tolerance =0.001; //Tolerance value of the local mean filter
+//save parameters
+  int save;	
+    save:netcdf_format=1; //save in netcdf format ?: 0=false, 1=true        
+    save:txt=0; //save in txt format --> to be removed
+    save: display=0;//display vector field using openpiv --> to be removed    
+}
+	

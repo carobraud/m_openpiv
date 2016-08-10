@@ -1,0 +1,43 @@
+# 22/01/2016
+#/home/braud/data/Eolien/SMARTEOLE/TESTS-@PRISME/PIV/OPEN_PIV
+
+#unused python program
+read_img.py
+read_mask.py (now in filters.py)
+
+# To process correlation for one pair of images (parameters.cdl to set) 
+ncgen -o parameters.nc parameters.cdl; python single_pair.py (using filters.py, netcdf_tools.py, write_NetCDF.py)
+
+# To process correlation for multiple pairs of images
+python MultiplePair.py -h
+ 
+#Example:
+ncgen -o parameters.nc parameters.cdl;python MultiplePair.py -ncpu 2 -do "/media/HDImage/SMARTEOLE/VECTORS/OPENPIV/PIV_10ms_000lmin_05deg_z539mm_dt35us_1000im/" -fo "VECTOR" -di "/media/HDImage/SMARTEOLE/PIV-Nov2015-TIF/PIV_10ms_000lmin_05deg_z539mm_dt35us_1000im/" -fp "parameters.nc" -pa "B0*_0.tif" -pb "B0*_1.tif"
+
+# To ckeck it is running over all willing CPUs:
+mpstat -P ALL 2
+
+#To concatenate(zip) and do statistics (mean,variance,skewness,flatness)
+cd '/home/braud/data/Eolien/SMARTEOLE/TESTS-@PRISME'
+remplir config.txt
+lancer concat.sh 
+
+# To convert Netcdf format to tecplot format:
+
+nc2tec.sh (use netcdf2tecplot.py and config.txt)
+
+# To regroup tecplot zones:
+
+concatz_fortecplot.sh (use config.txt)
+
+# run tecplot in bacth mode using a defined macro (using a layout: test_layout_tecplot.lay)
+
+tecplot -b -p macro.mcr
+
+# scripting to save PNG from tecplot automatically for files in config.txt
+./tec2png --> not working (problem script tecplot: no modfication of the image ??)
+
+#TODO:
+- include write_NetCDF.py in netcdf_tools.py
+- validation versus dantec
+- validation with PIV chalenge ?
